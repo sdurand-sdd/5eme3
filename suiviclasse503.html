@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi 4ème - Sécurisé v10</title>
+    <title>Suivi 5ème 3</title>
     <style>
         :root {
             --taupe-dark: #4A4440;
@@ -20,7 +20,6 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--taupe-light); padding: 10px; }
         .container { max-width: 1350px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
         
-        /* HEADER AVEC DECONNEXION */
         .header { background: var(--taupe-dark); color: white; padding: 15px; text-align: center; position: relative; }
         .logout-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.3s; }
         .logout-btn:hover { background: var(--color-red); border-color: transparent; }
@@ -48,8 +47,8 @@
         .count-display.perturbation.active { background: #fd79a8; }
 
         .attitude-indicator { font-size: 22px; }
-        .btn-plus {width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: ; #f5b8b8}
-        .btn-minus { width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: #a2f9ab; }
+        .btn-plus { width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: #f5b8b8; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .btn-minus { width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: #a2f9ab; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; }
 
         #loginModal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; z-index: 3000; box-shadow: 0 0 50px rgba(0,0,0,0.3); width: 320px; }
@@ -70,7 +69,7 @@
 
     <div id="overlay"></div>
     <div id="loginModal">
-        <h2 style="text-align:center; margin-bottom:15px;">🔐 Accès Professeur</h2>
+        <h2 style="text-align:center; margin-bottom:15px;">🔐 Accès Professeur 5ème 3</h2>
         <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:10px; margin-bottom:10px;">
         <input type="password" id="loginPassword" placeholder="Mot de passe" style="width:100%; padding:10px; margin-bottom:15px;">
         <button onclick="window.login()" style="width:100%; padding:12px; background:var(--taupe-dark); color:white; border:none; border-radius:5px; cursor:pointer;">Se connecter</button>
@@ -80,7 +79,7 @@
 
     <div class="container" id="appContainer" style="display:none;">
         <div class="header">
-            <h1>Suivi Classe 4ème</h1>
+            <h1>Suivi Classe 5ème 3</h1>
             <button class="logout-btn" onclick="window.logout()">Déconnexion 🚪</button>
         </div>
 
@@ -91,13 +90,13 @@
 
         <div id="view-saisie" class="view-content active">
             <div class="week-nav" style="text-align:center; padding:10px; background:var(--taupe-bg); border-radius:5px; margin-bottom:10px;">
-                <button onclick="window.changeWeek(-1)">◀ Semaine Précédente</button>
+                <button onclick="window.changeWeek(-1)">◀ Précédente</button>
                 <span id="weekDisplay" style="font-weight:bold; margin:0 20px; font-size:16px;"></span>
-                <button onclick="window.changeWeek(1)">Semaine Suivante ▶</button>
+                <button onclick="window.changeWeek(1)">Suivante ▶</button>
             </div>
             <table>
                 <thead>
-                    <tr><th>Élève</th><th>Retard</th><th>Travail</th><th>Matos</th><th>Bavard.</th><th>Perturb.</th><th>Attitude</th></tr>
+                    <tr><th>👨‍🎓Élève</th><th>🕰️Retard</th><th>📓Travail</th><th>📚Oubli</th><th>🗣️Bavard.</th><th>👿Perturbe</th><th>🌡️Attitude</th></tr>
                 </thead>
                 <tbody id="tableSaisie"></tbody>
             </table>
@@ -106,17 +105,15 @@
 
         <div id="view-stats" class="view-content">
             <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--taupe-bg); margin-bottom:15px; border-radius:5px;">
-                <h3 style="font-size:14px;">STATISTIQUES CUMULÉES</h3>
-                <button onclick="window.print()" style="padding:8px 15px; cursor:pointer; background:var(--taupe-dark); color:white; border:none; border-radius:4px;">🖨️ Générer PDF</button>
+                <h3 style="font-size:14px;">STATISTIQUES CUMULÉES 5ème 3</h3>
+                <button onclick="window.print()" style="padding:8px 15px; cursor:pointer; background:var(--taupe-dark); color:white; border:none; border-radius:4px;">🖨️ PDF</button>
             </div>
-            
             <table>
                 <thead>
                     <tr><th>Élève</th><th>Retards</th><th>Travail</th><th>Matériel</th><th>Bavard.</th><th>Perturb.</th><th>Total</th></tr>
                 </thead>
                 <tbody id="tableStats"></tbody>
             </table>
-
             <div style="margin-top:20px; border-top:2px solid var(--taupe-dark); padding-top:15px;">
                 <h3>Historique des notes hebdo</h3>
                 <div id="notesContainer" style="margin-top:10px;"></div>
@@ -125,11 +122,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-        // CONFIGURATION COLLÈGUE (5ème 3)
+        // CONFIGURATION SPÉCIFIQUE 5ème 3
         const firebaseConfig = {
             apiKey: "AIzaSyByXTbvU6F9UlO839bSmG1dgLvBMDfkK3A",
             authDomain: "suivi-5eme3.firebaseapp.com",
@@ -139,7 +136,13 @@
             appId: "1:96920713162:web:5c606b0785f50c96978133"
         };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // LISTE DES ÉLÈVES 5ème 3
         const eleves = ["Ed Jaad", "Noémie", "Adam", "Badia", "Adèle", "Axel", "Jules", "Lorenzo", "Rémi", "Giulia", "Eva", "Eline", "Kim", "Joseph", "Alexandre", "Esteban", "Gabriella", "Ehsan", "Paul", "Leny", "Veronika", "Léo", "Sara", "Enola", "Enzo", "Quentin", "Mohamed"];
+        
         const negCategories = ['retard', 'travail', 'materiel', 'bavardage', 'perturbation'];
         let currentWeekOffset = 0;
         let saveTimeout = null;
@@ -161,13 +164,13 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             try { await signInWithEmailAndPassword(auth, email, password); } 
-            catch (e) { alert("Accès refusé"); }
+            catch (e) { alert("Accès refusé - Vérifiez vos identifiants"); }
         };
 
         window.logout = async function() {
             if(confirm("Voulez-vous fermer votre session ?")) {
                 await signOut(auth);
-                location.reload(); // Recharger pour vider tous les caches
+                location.reload();
             }
         };
 
@@ -197,9 +200,11 @@
         function updateAttitude(eleve) {
             let total = 0;
             negCategories.forEach(cat => {
-                total += parseInt(document.getElementById(`count-${eleve}-${cat}`).textContent);
+                const el = document.getElementById(`count-${eleve}-${cat}`);
+                if(el) total += parseInt(el.textContent);
             });
             const indicator = document.getElementById(`attitude-${eleve}`);
+            if(!indicator) return;
             if (total === 0) indicator.textContent = "🟢";
             else if (total === 1) indicator.textContent = "🍏";
             else if (total === 2) indicator.textContent = "🟡";
@@ -228,7 +233,8 @@
             const data = {};
             eleves.forEach(e => {
                 negCategories.forEach(c => {
-                    data[`${e}_${c}`] = { count: parseInt(document.getElementById(`count-${e}-${c}`).textContent) };
+                    const el = document.getElementById(`count-${e}-${c}`);
+                    data[`${e}_${c}`] = { count: el ? parseInt(el.textContent) : 0 };
                 });
             });
             await setDoc(doc(db, 'weeks', `week_${week.year}_${week.weekNum}`), { 
@@ -236,91 +242,3 @@
                 notes: document.getElementById('weekNotes').value 
             });
             document.getElementById('saveIndicator').style.display = 'block';
-            setTimeout(() => document.getElementById('saveIndicator').style.display = 'none', 1000);
-        }
-
-        async function loadWeekData() {
-            const week = getWeekDates(currentWeekOffset);
-            const snap = await getDoc(doc(db, 'weeks', `week_${week.year}_${week.weekNum}`));
-            const data = snap.exists() ? snap.data().data : {};
-            document.getElementById('weekNotes').value = snap.exists() ? (snap.data().notes || '') : '';
-            eleves.forEach(e => {
-                negCategories.forEach(c => {
-                    const val = data[`${e}_${c}`]?.count || 0;
-                    const el = document.getElementById(`count-${e}-${c}`);
-                    el.textContent = val; el.classList.toggle('active', val > 0);
-                });
-                updateAttitude(e);
-            });
-        }
-
-        async function loadStats() {
-            const tbody = document.getElementById('tableStats');
-            const notesCont = document.getElementById('notesContainer');
-            tbody.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
-            const totals = {};
-            eleves.forEach(e => { totals[e] = { r:0, t:0, m:0, b:0, p:0 }; });
-
-            const snap = await getDocs(collection(db, "weeks"));
-            notesCont.innerHTML = '';
-            
-            snap.forEach((doc) => {
-                const wd = doc.data().data;
-                const wn = doc.data().notes;
-                const weekName = doc.id.replace('week_', 'Semaine ').replace('_', ' / ');
-
-                eleves.forEach(e => {
-                    if(wd[`${e}_retard`]) {
-                        totals[e].r += wd[`${e}_retard`].count || 0;
-                        totals[e].t += wd[`${e}_travail`].count || 0;
-                        totals[e].m += wd[`${e}_materiel`].count || 0;
-                        totals[e].b += wd[`${e}_bavardage`].count || 0;
-                        totals[e].p += wd[`${e}_perturbation`].count || 0;
-                    }
-                });
-
-                if (wn && wn.trim() !== "") {
-                    notesCont.innerHTML += `<div class="note-item"><span class="note-date">${weekName}</span><p>${wn}</p></div>`;
-                }
-            });
-
-            tbody.innerHTML = '';
-            eleves.forEach(e => {
-                const t = totals[e];
-                const sum = t.r + t.t + t.m + t.b + t.p;
-                tbody.innerHTML += `<tr><td>${e}</td><td>${t.r}</td><td>${t.t}</td><td>${t.m}</td><td>${t.b}</td><td>${t.p}</td>
-                <td><span style="font-weight:bold; color:${sum >= 10 ? 'red' : 'black'}">${sum}</span></td></tr>`;
-            });
-        }
-
-        function initTable() {
-            const tbody = document.getElementById('tableSaisie');
-            tbody.innerHTML = '';
-            eleves.forEach(eleve => {
-                const row = document.createElement('tr');
-                let html = `<td>${eleve}</td>`;
-                negCategories.forEach(cat => {
-                    html += `<td><div class="cell-container">
-                        <button class="btn-minus" onclick="window.changeCount('${eleve}', '${cat}', -1)">-</button>
-                        <span class="count-display ${cat}" id="count-${eleve}-${cat}">0</span>
-                        <button class="btn-plus" onclick="window.changeCount('${eleve}', '${cat}', 1)">+</button>
-                    </div></td>`;
-                });
-                html += `<td><span class="attitude-indicator" id="attitude-${eleve}">🟢</span></td>`;
-                row.innerHTML = html;
-                tbody.appendChild(row);
-            });
-        }
-
-        async function initApp() {
-            initTable();
-            document.getElementById('weekDisplay').textContent = getWeekDates(0).display;
-            await loadWeekData();
-            document.getElementById('weekNotes').addEventListener('input', debounceSave);
-        }
-    </script>
-</body>
-
-</html>
-
-
