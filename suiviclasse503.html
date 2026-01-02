@@ -242,3 +242,88 @@
                 notes: document.getElementById('weekNotes').value 
             });
             document.getElementById('saveIndicator').style.display = 'block';
+            setTimeout(() => document.getElementById('saveIndicator').style.display = 'none', 1000);
+        }
+
+        async function loadWeekData() {
+            const week = getWeekDates(currentWeekOffset);
+            const snap = await getDoc(doc(db, 'weeks', `week_${week.year}_${week.weekNum}`));
+            const data = snap.exists() ? snap.data().data : {};
+            document.getElementById('weekNotes').value = snap.exists() ? (snap.data().notes || '') : '';
+            eleves.forEach(e => {
+                negCategories.forEach(c => {
+                    const val = data[`${e}_${c}`]?.count || 0;
+                    const el = document.getElementById(`count-${e}-${c}`);
+                    if(el) { el.textContent = val; el.classList.toggle('active', val > 0); }
+                });
+                updateAttitude(e);
+            });
+        }
+
+        async function loadStats() {
+            const tbody = document.getElementById('tableStats');
+            const notesCont = document.getElementById('notesContainer');
+            tbody.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
+            const totals = {};
+            eleves.forEach(e => { totals[e] = { r:0, t:0, m:0, b:0, p:0 }; });
+
+            const snap = await getDocs(collection(db, "weeks"));
+            notesCont.innerHTML = '';
+            
+            snap.forEach((doc) => {
+                const wd = doc.data().data;
+                const wn = doc.data().notes;
+                const weekName = doc.id.replace('week_', 'Semaine ').replace('_', ' / ');
+
+                eleves.forEach(e => {
+                    if(wd[`${e}_retard`]) {
+                        totals[e].r += wd[`${e}_retard`].count || 0;
+                        totals[e].t += wd[`${e}_travail`].count || 0;
+                        totals[e].m += wd[`${e}_materiel`].count || 0;
+                        totals[e].b += wd[`${e}_bavardage`].count || 0;
+                        totals[e].p += wd[`${e}_perturbation`].count || 0;
+                    }
+                });
+
+                if (wn && wn.trim() !== "") {
+                    notesCont.innerHTML += `<div class="note-item"><span class="note-date">${weekName}</span><p>${wn}</p></div>`;
+                }
+            });
+
+            tbody.innerHTML = '';
+            eleves.forEach(e => {
+                const t = totals[e];
+                const sum = t.r + t.t + t.m + t.b + t.p;
+                tbody.innerHTML += `<tr><td>${e}</td><td>${t.r}</td><td>${t.t}</td><td>${t.m}</td><td>${t.b}</td><td>${t.p}</td>
+                <td><span style="font-weight:bold; color:${sum >= 10 ? 'red' : 'black'}">${sum}</span></td></tr>`;
+            });
+        }
+
+        function initTable() {
+            const tbody = document.getElementById('tableSaisie');
+            tbody.innerHTML = '';
+            eleves.forEach(eleve => {
+                const row = document.createElement('tr');
+                let html = `<td>${eleve}</td>`;
+                negCategories.forEach(cat => {
+                    html += `<td><div class="cell-container">
+                        <button class="btn-minus" onclick="window.changeCount('${eleve}', '${cat}', -1)">-</button>
+                        <span class="count-display ${cat}" id="count-${eleve}-${cat}">0</span>
+                        <button class="btn-plus" onclick="window.changeCount('${eleve}', '${cat}', 1)">+</button>
+                    </div></td>`;
+                });
+                html += `<td><span class="attitude-indicator" id="attitude-${eleve}">🟢</span></td>`;
+                row.innerHTML = html;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function initApp() {
+            initTable();
+            document.getElementById('weekDisplay').textContent = getWeekDates(0).display;
+            await loadWeekData();
+            document.getElementById('weekNotes').addEventListener('input', debounceSave);
+        }
+    </script>
+</body>
+</html>
