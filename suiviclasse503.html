@@ -32,7 +32,14 @@
         .view-content.active { display: block; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        th { background: var(--taupe-medium); color: white; padding: 8px 4px; font-size: 11px; text-transform: uppercase; }
+        th { 
+    background: var(--taupe-medium); 
+    color: white; 
+    padding: 12px 4px;      /* Augmentation de l'espace vertical */
+    font-size: 14px;        /* Taille de police augmentée */
+    text-transform: uppercase; 
+    letter-spacing: 1px;    /* Un peu d'espace entre les lettres pour la clarté */
+}
         td { padding: 2px 4px; text-align: center; border-bottom: 1px solid #eee; height: 35px; }
         tbody tr:nth-child(even) { background-color: #fafafa; }
         td:first-child { font-weight: bold; color: var(--taupe-dark); text-align: left; padding-left: 10px; width: 150px; font-size: 15px; }
@@ -327,4 +334,5 @@
     </script>
 </body>
 </html>
+
 
