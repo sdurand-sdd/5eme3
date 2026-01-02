@@ -3,88 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi Classe 5ème 3</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <title>Suivi 4ème - Sécurisé v10</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f4f7f6;
-            --white: #ffffff;
+            --taupe-dark: #4A4440;
+            --taupe-medium: #8C8279;
+            --taupe-light: #E5E0DB;
+            --taupe-bg: #F2EFED;
+            --color-red: #ff6b6b;
+            --color-green: #55efc4;
+            --color-yellow: #ffd93d;
+            --color-orange: #ff9f43;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--primary); margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        header { background: var(--primary); color: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .auth-card { background: white; padding: 2rem; border-radius: 12px; width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; transition: opacity 0.3s; }
-        button:hover { opacity: 0.9; }
-        .logout-btn { background: #e74c3c; font-size: 0.8rem; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: #ddd; color: var(--primary); font-weight: bold; }
-        .tab-btn.active { background: var(--accent); color: white; }
-        .student-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: grid; grid-template-columns: 180px 1fr auto; align-items: center; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .student-name { font-weight: bold; font-size: 1.1rem; }
-        .counters { display: flex; gap: 15px; justify-content: center; }
-        .counter-group { text-align: center; background: #f8f9fa; padding: 8px; border-radius: 8px; min-width: 80px; }
-        .counter-label { font-size: 0.7rem; text-transform: uppercase; color: #7f8c8d; display: block; margin-bottom: 5px; }
-        .btn-inc { background: #2ecc71; width: 25px; height: 25px; border-radius: 50%; padding: 0; line-height: 1; }
-        .btn-dec { background: #e74c3c; width: 25px; height: 25px; border-radius: 50%; padding: 0; line-height: 1; margin-right: 5px; }
-        .score-badge { font-size: 1.2rem; font-weight: bold; padding: 5px 15px; border-radius: 20px; min-width: 40px; text-align: center; }
-        .status-saved { color: #2ecc71; font-size: 0.9rem; margin-top: 10px; display: none; }
-        .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
-        .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        .history-table th { background: #f8f9fa; }
-        #page-app { display: none; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--taupe-light); padding: 10px; }
+        .container { max-width: 1350px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+        
+        /* HEADER AVEC DECONNEXION */
+        .header { background: var(--taupe-dark); color: white; padding: 15px; text-align: center; position: relative; }
+        .logout-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .logout-btn:hover { background: var(--color-red); border-color: transparent; }
+
+        .tabs { display: flex; background: #3d3834; justify-content: center; }
+        .tab-btn { padding: 12px 25px; border: none; background: none; color: #bbb; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .tab-btn.active { color: white; background: var(--taupe-medium); border-bottom: 3px solid var(--color-green); }
+
+        .view-content { display: none; padding: 10px; }
+        .view-content.active { display: block; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th { background: var(--taupe-medium); color: white; padding: 8px 4px; font-size: 11px; text-transform: uppercase; }
+        td { padding: 2px 4px; text-align: center; border-bottom: 1px solid #eee; height: 35px; }
+        tbody tr:nth-child(even) { background-color: #fafafa; }
+        td:first-child { font-weight: bold; color: var(--taupe-dark); text-align: left; padding-left: 10px; width: 150px; font-size: 15px; }
+        
+        .cell-container { display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .count-display { min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; background: #fff; border: 1px solid #ccc; border-radius: 4px; }
+        .count-display.active { color: white; border: none; }
+        .count-display.retard.active { background: var(--color-red); }
+        .count-display.travail.active { background: var(--color-yellow); color: #333; }
+        .count-display.materiel.active { background: var(--color-orange); }
+        .count-display.bavardage.active { background: #a29bfe; }
+        .count-display.perturbation.active { background: #fd79a8; }
+
+        .attitude-indicator { font-size: 22px; }
+        .btn-plus {width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: ; #f5b8b8}
+        .btn-minus { width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 50px; cursor: pointer; background: #a2f9ab; }
+        textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; }
+
+        #loginModal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; z-index: 3000; box-shadow: 0 0 50px rgba(0,0,0,0.3); width: 320px; }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; }
+        .save-indicator { position: fixed; top: 10px; right: 10px; background: var(--color-green); padding: 8px 15px; border-radius: 5px; display: none; z-index: 4000; color: white; }
+
+        .note-item { margin-bottom: 10px; padding: 8px; background: #f9f9f9; border-left: 4px solid var(--taupe-medium); }
+        .note-date { font-weight: bold; font-size: 11px; color: #666; }
+
+        @media print {
+            .tabs, .header, #overlay, #loginModal, .week-nav, .btn-print, .actions-bar, .btn-plus, .btn-minus, textarea, .logout-btn { display: none !important; }
+            .container { box-shadow: none; border: none; }
+            #view-stats { display: block !important; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen" class="auth-screen">
-        <div class="auth-card">
-            <h3>Suivi 5ème 3</h3>
-            <p style="font-size: 0.8rem; color: #666;">Espace Équipe Pédagogique</p>
-            <input type="email" id="email" placeholder="Email de l'équipe">
-            <input type="password" id="password" placeholder="Mot de passe">
-            <button onclick="handleLogin()">Se connecter</button>
-            <p id="auth-error" style="color: red; font-size: 0.8rem; margin-top: 10px;"></p>
-        </div>
+    <div id="overlay"></div>
+    <div id="loginModal">
+        <h2 style="text-align:center; margin-bottom:15px;">🔐 Accès Professeur</h2>
+        <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="password" id="loginPassword" placeholder="Mot de passe" style="width:100%; padding:10px; margin-bottom:15px;">
+        <button onclick="window.login()" style="width:100%; padding:12px; background:var(--taupe-dark); color:white; border:none; border-radius:5px; cursor:pointer;">Se connecter</button>
     </div>
 
-    <div id="page-app" class="container">
-        <header>
-            <div>
-                <h1 style="margin:0; font-size: 1.5rem;">Classe 5ème 3</h1>
-                <div id="save-status" class="status-saved">✓ Sauvegardé</div>
-            </div>
-            <button class="logout-btn" onclick="handleLogout()">Déconnexion</button>
-        </header>
+    <div class="save-indicator" id="saveIndicator">✓ Sauvegardé</div>
+
+    <div class="container" id="appContainer" style="display:none;">
+        <div class="header">
+            <h1>Suivi Classe 4ème</h1>
+            <button class="logout-btn" onclick="window.logout()">Déconnexion 🚪</button>
+        </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('suivi')">Saisie du cours</button>
-            <button class="tab-btn" onclick="showTab('bilan')">Bilan & Export</button>
+            <button class="tab-btn active" id="tab-saisie" onclick="window.switchTab('saisie')">📝 SAISIE HEBDO</button>
+            <button class="tab-btn" id="tab-stats" onclick="window.switchTab('stats')">📊 BILAN & NOTES</button>
         </div>
 
-        <div id="tab-suivi">
-            <div id="students-list"></div>
-        </div>
-
-        <div id="tab-bilan" style="display:none;">
-            <button onclick="exportPDF()" style="margin-bottom: 20px; background: #27ae60;">Télécharger le Bilan PDF</button>
-            <table class="history-table">
+        <div id="view-saisie" class="view-content active">
+            <div class="week-nav" style="text-align:center; padding:10px; background:var(--taupe-bg); border-radius:5px; margin-bottom:10px;">
+                <button onclick="window.changeWeek(-1)">◀ Semaine Précédente</button>
+                <span id="weekDisplay" style="font-weight:bold; margin:0 20px; font-size:16px;"></span>
+                <button onclick="window.changeWeek(1)">Semaine Suivante ▶</button>
+            </div>
+            <table>
                 <thead>
-                    <tr>
-                        <th>Élève</th>
-                        <th>Retards</th>
-                        <th>Oublis</th>
-                        <th>Bavardages</th>
-                        <th>Note Participation</th>
-                    </tr>
+                    <tr><th>Élève</th><th>Retard</th><th>Travail</th><th>Matos</th><th>Bavard.</th><th>Perturb.</th><th>Attitude</th></tr>
                 </thead>
-                <tbody id="history-body"></tbody>
+                <tbody id="tableSaisie"></tbody>
             </table>
+            <textarea id="weekNotes" placeholder="Notes de la semaine (incidents, progrès, rappels...)"></textarea>
+        </div>
+
+        <div id="view-stats" class="view-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--taupe-bg); margin-bottom:15px; border-radius:5px;">
+                <h3 style="font-size:14px;">STATISTIQUES CUMULÉES</h3>
+                <button onclick="window.print()" style="padding:8px 15px; cursor:pointer; background:var(--taupe-dark); color:white; border:none; border-radius:4px;">🖨️ Générer PDF</button>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr><th>Élève</th><th>Retards</th><th>Travail</th><th>Matériel</th><th>Bavard.</th><th>Perturb.</th><th>Total</th></tr>
+                </thead>
+                <tbody id="tableStats"></tbody>
+            </table>
+
+            <div style="margin-top:20px; border-top:2px solid var(--taupe-dark); padding-top:15px;">
+                <h3>Historique des notes hebdo</h3>
+                <div id="notesContainer" style="margin-top:10px;"></div>
+            </div>
         </div>
     </div>
 
@@ -103,145 +139,188 @@
             appId: "1:96920713162:web:5c606b0785f50c96978133"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // LISTE DES ÉLÈVES
         const eleves = ["Ed Jaad", "Noémie", "Adam", "Badia", "Adèle", "Axel", "Jules", "Lorenzo", "Rémi", "Giulia", "Eva", "Eline", "Kim", "Joseph", "Alexandre", "Esteban", "Gabriella", "Ehsan", "Paul", "Leny", "Veronika", "Léo", "Sara", "Enola", "Enzo", "Quentin", "Mohamed"];
+        const negCategories = ['retard', 'travail', 'materiel', 'bavardage', 'perturbation'];
+        let currentWeekOffset = 0;
+        let saveTimeout = null;
 
-        let currentData = {};
-        const weekKey = `week_${new Date().getFullYear()}_${getWeekNumber(new Date())}`;
-
-        // AUTHENTIFICATION
-        window.handleLogin = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch (e) {
-                document.getElementById('auth-error').innerText = "Erreur de connexion";
-            }
-        };
-
-        window.handleLogout = () => signOut(auth);
-
-        onAuthStateChanged(auth, user => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('page-app').style.display = 'block';
-                initRealtimeData();
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                initApp();
             } else {
-                document.getElementById('auth-screen').style.display = 'flex';
-                document.getElementById('page-app').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
             }
         });
 
-        // SYNCHRO FIREBASE
-        function initRealtimeData() {
-            onSnapshot(doc(db, 'suivi', weekKey), (doc) => {
-                currentData = doc.exists() ? doc.data() : {};
-                renderStudents();
-                renderHistory();
-            });
-        }
-
-        async function saveData() {
-            const status = document.getElementById('save-status');
-            status.style.display = 'block';
-            await setDoc(doc(db, 'suivi', weekKey), currentData);
-            setTimeout(() => status.style.display = 'none', 2000);
-        }
-
-        // LOGIQUE MÉTIER
-        function getScore(name) {
-            const d = currentData[name] || { r: 0, o: 0, b: 0 };
-            return Math.max(0, 20 - (d.r * 2) - (d.o * 2) - (d.b * 1));
-        }
-
-        window.updateVal = (name, field, delta) => {
-            if (!currentData[name]) currentData[name] = { r: 0, o: 0, b: 0 };
-            currentData[name][field] = Math.max(0, currentData[name][field] + delta);
-            saveData();
+        window.login = async function() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try { await signInWithEmailAndPassword(auth, email, password); } 
+            catch (e) { alert("Accès refusé"); }
         };
 
-        // RENDER
-        function renderStudents() {
-            const list = document.getElementById('students-list');
-            list.innerHTML = eleves.map(name => {
-                const d = currentData[name] || { r: 0, o: 0, b: 0 };
-                const score = getScore(name);
-                let color = "#2ecc71";
-                if(score < 16) color = "#f1c40f";
-                if(score < 12) color = "#e67e22";
-                if(score < 8) color = "#e74c3c";
+        window.logout = async function() {
+            if(confirm("Voulez-vous fermer votre session ?")) {
+                await signOut(auth);
+                location.reload(); // Recharger pour vider tous les caches
+            }
+        };
 
-                return `
-                    <div class="student-card">
-                        <div class="student-name">${name}</div>
-                        <div class="counters">
-                            <div class="counter-group">
-                                <span class="counter-label">Retards</span>
-                                <button class="btn-dec" onclick="updateVal('${name}','r',-1)">-</button>
-                                <strong>${d.r}</strong>
-                                <button class="btn-inc" onclick="updateVal('${name}','r',1)">+</button>
-                            </div>
-                            <div class="counter-group">
-                                <span class="counter-label">Oublis</span>
-                                <button class="btn-dec" onclick="updateVal('${name}','o',-1)">-</button>
-                                <strong>${d.o}</strong>
-                                <button class="btn-inc" onclick="updateVal('${name}','o',1)">+</button>
-                            </div>
-                            <div class="counter-group">
-                                <span class="counter-label">Bavard.</span>
-                                <button class="btn-dec" onclick="updateVal('${name}','b',-1)">-</button>
-                                <strong>${d.b}</strong>
-                                <button class="btn-inc" onclick="updateVal('${name}','b',1)">+</button>
-                            </div>
-                        </div>
-                        <div class="score-badge" style="background: ${color}22; color: ${color}">${score}/20</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderHistory() {
-            const body = document.getElementById('history-body');
-            body.innerHTML = eleves.map(name => {
-                const d = currentData[name] || { r: 0, o: 0, b: 0 };
-                return `<tr><td>${name}</td><td>${d.r}</td><td>${d.o}</td><td>${d.b}</td><td><strong>${getScore(name)}/20</strong></td></tr>`;
-            }).join('');
-        }
-
-        // NAVIGATION
-        window.showTab = (tab) => {
-            document.getElementById('tab-suivi').style.display = tab === 'suivi' ? 'block' : 'none';
-            document.getElementById('tab-bilan').style.display = tab === 'bilan' ? 'block' : 'none';
+        window.switchTab = function(tabName) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+            if(tabName === 'saisie') document.getElementById('tab-saisie').classList.add('active');
+            else { document.getElementById('tab-stats').classList.add('active'); loadStats(); }
+            document.getElementById('view-' + tabName).classList.add('active');
         };
 
-        // EXPORT PDF
-        window.exportPDF = () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text(`Bilan Suivi Classe 5ème 3 - Semaine ${getWeekNumber(new Date())}`, 14, 15);
-            doc.autoTable({
-                startY: 25,
-                head: [['Élève', 'Retards', 'Oublis', 'Bavardages', 'Note']],
-                body: eleves.map(n => {
-                    const d = currentData[n] || { r: 0, o: 0, b: 0 };
-                    return [n, d.r, d.o, d.b, getScore(n) + "/20"];
-                })
+        function getWeekDates(offset) {
+            const today = new Date(); today.setDate(today.getDate() + (offset * 7));
+            const day = today.getDay();
+            const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(today.setDate(diff));
+            const weekNum = Math.ceil((((monday - new Date(monday.getFullYear(), 0, 1)) / 86400000) + 1) / 7);
+            return { weekNum, year: monday.getFullYear(), display: `Semaine ${weekNum} (${monday.getFullYear()})` };
+        }
+
+        window.changeWeek = async function(offset) {
+            currentWeekOffset += offset;
+            document.getElementById('weekDisplay').textContent = getWeekDates(currentWeekOffset).display;
+            await loadWeekData();
+        };
+
+        function updateAttitude(eleve) {
+            let total = 0;
+            negCategories.forEach(cat => {
+                total += parseInt(document.getElementById(`count-${eleve}-${cat}`).textContent);
             });
-            doc.save(`Bilan_503_Semaine_${getWeekNumber(new Date())}.pdf`);
+            const indicator = document.getElementById(`attitude-${eleve}`);
+            if (total === 0) indicator.textContent = "🟢";
+            else if (total === 1) indicator.textContent = "🍏";
+            else if (total === 2) indicator.textContent = "🟡";
+            else if (total === 3) indicator.textContent = "📒";
+            else if (total === 4) indicator.textContent = "🟠";
+            else if (total === 5) indicator.textContent = "😡";
+            else indicator.textContent = "🔴";
+        }
+
+        window.changeCount = function(e, c, v) {
+            const el = document.getElementById(`count-${e}-${c}`);
+            let val = Math.max(0, parseInt(el.textContent) + v);
+            el.textContent = val;
+            el.classList.toggle('active', val > 0);
+            updateAttitude(e);
+            debounceSave();
         };
 
-        function getWeekNumber(d) {
-            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-            return Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000) + 1) / 7);
+        function debounceSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveCurrentWeek, 1000);
+        }
+
+        async function saveCurrentWeek() {
+            const week = getWeekDates(currentWeekOffset);
+            const data = {};
+            eleves.forEach(e => {
+                negCategories.forEach(c => {
+                    data[`${e}_${c}`] = { count: parseInt(document.getElementById(`count-${e}-${c}`).textContent) };
+                });
+            });
+            await setDoc(doc(db, 'weeks', `week_${week.year}_${week.weekNum}`), { 
+                data, 
+                notes: document.getElementById('weekNotes').value 
+            });
+            document.getElementById('saveIndicator').style.display = 'block';
+            setTimeout(() => document.getElementById('saveIndicator').style.display = 'none', 1000);
+        }
+
+        async function loadWeekData() {
+            const week = getWeekDates(currentWeekOffset);
+            const snap = await getDoc(doc(db, 'weeks', `week_${week.year}_${week.weekNum}`));
+            const data = snap.exists() ? snap.data().data : {};
+            document.getElementById('weekNotes').value = snap.exists() ? (snap.data().notes || '') : '';
+            eleves.forEach(e => {
+                negCategories.forEach(c => {
+                    const val = data[`${e}_${c}`]?.count || 0;
+                    const el = document.getElementById(`count-${e}-${c}`);
+                    el.textContent = val; el.classList.toggle('active', val > 0);
+                });
+                updateAttitude(e);
+            });
+        }
+
+        async function loadStats() {
+            const tbody = document.getElementById('tableStats');
+            const notesCont = document.getElementById('notesContainer');
+            tbody.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
+            const totals = {};
+            eleves.forEach(e => { totals[e] = { r:0, t:0, m:0, b:0, p:0 }; });
+
+            const snap = await getDocs(collection(db, "weeks"));
+            notesCont.innerHTML = '';
+            
+            snap.forEach((doc) => {
+                const wd = doc.data().data;
+                const wn = doc.data().notes;
+                const weekName = doc.id.replace('week_', 'Semaine ').replace('_', ' / ');
+
+                eleves.forEach(e => {
+                    if(wd[`${e}_retard`]) {
+                        totals[e].r += wd[`${e}_retard`].count || 0;
+                        totals[e].t += wd[`${e}_travail`].count || 0;
+                        totals[e].m += wd[`${e}_materiel`].count || 0;
+                        totals[e].b += wd[`${e}_bavardage`].count || 0;
+                        totals[e].p += wd[`${e}_perturbation`].count || 0;
+                    }
+                });
+
+                if (wn && wn.trim() !== "") {
+                    notesCont.innerHTML += `<div class="note-item"><span class="note-date">${weekName}</span><p>${wn}</p></div>`;
+                }
+            });
+
+            tbody.innerHTML = '';
+            eleves.forEach(e => {
+                const t = totals[e];
+                const sum = t.r + t.t + t.m + t.b + t.p;
+                tbody.innerHTML += `<tr><td>${e}</td><td>${t.r}</td><td>${t.t}</td><td>${t.m}</td><td>${t.b}</td><td>${t.p}</td>
+                <td><span style="font-weight:bold; color:${sum >= 10 ? 'red' : 'black'}">${sum}</span></td></tr>`;
+            });
+        }
+
+        function initTable() {
+            const tbody = document.getElementById('tableSaisie');
+            tbody.innerHTML = '';
+            eleves.forEach(eleve => {
+                const row = document.createElement('tr');
+                let html = `<td>${eleve}</td>`;
+                negCategories.forEach(cat => {
+                    html += `<td><div class="cell-container">
+                        <button class="btn-minus" onclick="window.changeCount('${eleve}', '${cat}', -1)">-</button>
+                        <span class="count-display ${cat}" id="count-${eleve}-${cat}">0</span>
+                        <button class="btn-plus" onclick="window.changeCount('${eleve}', '${cat}', 1)">+</button>
+                    </div></td>`;
+                });
+                html += `<td><span class="attitude-indicator" id="attitude-${eleve}">🟢</span></td>`;
+                row.innerHTML = html;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function initApp() {
+            initTable();
+            document.getElementById('weekDisplay').textContent = getWeekDates(0).display;
+            await loadWeekData();
+            document.getElementById('weekNotes').addEventListener('input', debounceSave);
         }
     </script>
 </body>
+
 </html>
+
+
